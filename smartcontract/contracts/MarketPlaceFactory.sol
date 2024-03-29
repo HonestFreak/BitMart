@@ -18,6 +18,7 @@ contract MarketPlaceFactory{
         MarketPlace marketPlace = new MarketPlace(_name, _description);
         marketPlaces.push(marketPlace);
         retailerContract[msg.sender] = address(marketPlace);
+        marketPlace.transferOwnership(msg.sender);
         emit MarketPlaceCreated(msg.sender, address(marketPlace));
         return address(marketPlace);
     }

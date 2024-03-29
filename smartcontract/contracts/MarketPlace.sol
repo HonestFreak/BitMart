@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MarketPlace is Ownable, ERC721URIStorage {
+contract MarketPlace is Ownable {
     // Product
     struct Product {
         string name;
@@ -20,9 +19,9 @@ contract MarketPlace is Ownable, ERC721URIStorage {
     // Timestamps of sold, Address of customer
     string public marketPlaceName; 
     string public marketPlaceDescription;
-    uint private tokenId = 0;
+    // uint private tokenId = 0;
 
-    constructor(string memory _name, string memory _description) Ownable(msg.sender) ERC721("MarketplaceToken", "MPT") {
+    constructor(string memory _name, string memory _description) Ownable(msg.sender) {
         marketPlaceName = _name;
         marketPlaceDescription = _description;
     }
@@ -30,7 +29,7 @@ contract MarketPlace is Ownable, ERC721URIStorage {
     event ProductAdded(string name, uint price, uint quantity, string ipfsLink);
     event DeleteProduct(string name);
     event EditProduct(string name, uint price, uint quantity, string ipfsLink);
-    event ProductPurchased(uint indexed tokenId, uint productId, address buyer);
+    event ProductPurchased(uint productId, address buyer);
 
     function addProduct(string memory _name, string memory _description, uint _price, uint _quantity, string memory _ipfsLink) public {
         require(bytes(_name).length > 0, "Name required");
@@ -80,24 +79,16 @@ contract MarketPlace is Ownable, ERC721URIStorage {
         require(products[_id].quantity > 0, "Product out of stock");
         require(msg.value >= products[_id].price, "Insufficient funds");
 
-        // Transfer funds to the contract owner
-        address payable owner = payable(owner());
-        owner.transfer(products[_id].price);
+        payable(owner()).transfer(msg.value);
 
-        // Set the token URI with product details
-        string memory tokenUri = products[_id].name;
-        _setTokenURI(tokenId, tokenUri);
-
-        // Transfer the token to the buyer
-        _safeMint(msg.sender, tokenId);
-
+  
         // Update product information
         products[_id].sold += 1;
         products[_id].quantity -= 1;
-        tokenId += 1;
+     
 
         // Emit an event for the purchase
-        emit ProductPurchased(tokenId, _id, msg.sender);
+        emit ProductPurchased(_id, msg.sender);
     }
 
 }

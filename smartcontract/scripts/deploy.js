@@ -7,36 +7,7 @@
 const hre = require("hardhat");
 
 async function main() {
-
-
-  // const retailerContract = await hre.ethers.deployContract("Retailer");
-  // await retailerContract.waitForDeployment();
-
-  // console.log(
-  //  "Retailer Contract Address:",
-  //   retailerContract.target
-  // );
-
-  // // Add constructor arguments here
-  // // name,desc
-  // const marketplaceContract = await hre.ethers.deployContract("MarketPlace",[]
-  // await marketplaceContract.waitForDeployment();
-
-
-  // console.log(
-  //   "Marketplace Contract Address:",
-  //     marketplaceContract.target
-  //   );
-
-  // const factoryContract = await hre.ethers.deployContract("MarketPlaceFactory");
-  // await factoryContract.waitForDeployment();
-
-  // console.log(
-  //   "Factory Contract Address:",
-  //     factoryContract.target
-  //   );
-
-  // const marketplaceContract = await hre.ethers.getContractAt("MarketPlace",factoryContract.target);
+  // const marketplaceContract = await hre.ethers.deployContract("MarketPlace",["ecom","ecommerce"]);
   // await marketplaceContract.waitForDeployment();
 
   // console.log(
@@ -44,7 +15,10 @@ async function main() {
   //     marketplaceContract.target
   //   );
 
+  const factoryContract = await hre.ethers.deployContract("MarketPlaceFactory");
+  await factoryContract.waitForDeployment();
 
+  console.log("Factory Contract Address:", factoryContract.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
