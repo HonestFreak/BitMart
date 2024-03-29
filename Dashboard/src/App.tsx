@@ -81,7 +81,7 @@ function App() {
   return (
     <>
       {
-        isRegisteredRetailer ?
+        !isRegisteredRetailer ?
           (<Routes>
             <Route element={<DefaultLayout val={account}
               market={marketAddress}
@@ -166,13 +166,13 @@ function App() {
                 <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                   <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
                     <h3 className="font-medium text-black dark:text-white">
-                      🗿 MetaMart : Your own no-code market in Metaverse
+                      🗿 BitMart : Your own no-code market in Metaverse
                     </h3>
                   </div>
                   <div className="p-7">
                     😯 Create your own market on Metaverse easily without any coding hassle.
                     <br /><br />
-                    😍 MetaMart is powered by Botanix Network for quick payments and low gas fees!
+                    😍 BitMart is powered by Botanix Network for quick payments and low gas fees!
                     <br /><br />
                     🤑 Take your market to next level by adding 3D models of your products.
                     <br /><br />

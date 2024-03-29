@@ -10,7 +10,32 @@ import ChartTwo from '../components/ChartTwo.tsx';
 import ChartThree from '../components/ChartThree.tsx';
 import TableTwo from '../components/TableTwo.tsx';
 
+
+
 const Dashboard = (props) => {
+    const marketContract = props["marketContract"];
+    const account = props["account"];
+    const [products, setProducts] = useState([]);
+    const [metrics, setMetrics] = useState({});
+  
+    useEffect(() => {
+      fetchProducts().then(() => {
+        calculateMetrics(products);
+      });
+    }, []);
+  
+    const fetchProducts = async () => {
+      try {
+        const products = await marketContract.getProducts();
+        setProducts(products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    const calculateMetrics = (products) => {
+        // Do complex analytics here 🤓
+    }
 
     return (
         <>
