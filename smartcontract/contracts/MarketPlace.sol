@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MarketPlace is Ownable {
+contract MarketPlace is Ownable,ERC721URIStorage {
     // Product
     struct Product {
         string name;
@@ -19,17 +20,12 @@ contract MarketPlace is Ownable {
     // Timestamps of sold, Address of customer
     string public marketPlaceName; 
     string public marketPlaceDescription;
-    // uint private tokenId = 0;
+    uint private tokenId = 0;
 
-    constructor(string memory _name, string memory _description) Ownable(msg.sender) {
+    constructor(string memory _name, string memory _description) Ownable(msg.sender) ERC721("BITMART", "BMART") {
         marketPlaceName = _name;
         marketPlaceDescription = _description;
     }
-
-    event ProductAdded(string name, uint price, uint quantity, string ipfsLink);
-    event DeleteProduct(string name);
-    event EditProduct(string name, uint price, uint quantity, string ipfsLink);
-    event ProductPurchased(uint productId, address buyer);
 
     function addProduct(string memory _name, string memory _description, uint _price, uint _quantity, string memory _ipfsLink) public {
         require(bytes(_name).length > 0, "Name required");
@@ -39,7 +35,6 @@ contract MarketPlace is Ownable {
         require(bytes(_ipfsLink).length > 0, "IPFS Link required");
 
         products.push(Product(_name, _description, _price, _quantity, _ipfsLink, 0));
-        emit ProductAdded(_name, _price, _quantity, _ipfsLink);
     }
 
     function getProducts() public view returns (Product[] memory) {
@@ -70,8 +65,6 @@ contract MarketPlace is Ownable {
         products[_id].description = _description; 
         products[_id].quantity = _quantity;
         products[_id].ipfsLink = _ipfsLink;
-
-        emit EditProduct(_name, _price, _quantity, _ipfsLink);
     }
 
     function buyProduct(uint _id) public payable {
@@ -85,10 +78,12 @@ contract MarketPlace is Ownable {
         // Update product information
         products[_id].sold += 1;
         products[_id].quantity -= 1;
-     
 
-        // Emit an event for the purchase
-        emit ProductPurchased(_id, msg.sender);
+        // Mint NFT
+        tokenId = tokenId + 1;
+        _mint(msg.sender, tokenId);
+        _setTokenURI(tokenId, string(abi.encodePacked(marketPlaceName, marketPlaceDescription, products[_id].name, products[_id].description)));
     }
 
 }
+

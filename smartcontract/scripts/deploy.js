@@ -7,17 +7,14 @@
 const hre = require("hardhat");
 
 async function main() {
-  // const marketplaceContract = await hre.ethers.deployContract("MarketPlace",["ecom","ecommerce"]);
+  // const marketplaceContract = await hre.ethers.deployContract("MarketPlace", [
+  //   "ecom",
+  //   "ecommerce",
+  // ]);
   // await marketplaceContract.waitForDeployment();
-
-  // console.log(
-  //   "Marketplace Contract Address:",
-  //     marketplaceContract.target
-  //   );
-
+  // console.log("Marketplace Contract Address:", marketplaceContract.target);
   const factoryContract = await hre.ethers.deployContract("MarketPlaceFactory");
   await factoryContract.waitForDeployment();
-
   console.log("Factory Contract Address:", factoryContract.target);
 }
 
